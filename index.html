@@ -775,22 +775,158 @@
 
     /* ── VIDEO SECTION ── */
     #video-section {
-      position: relative; height: 80vh; overflow: hidden;
-      display: flex; align-items: flex-end;
+      position: relative; height: 85vh; overflow: hidden;
+      display: flex; align-items: flex-end; cursor: none;
     }
     #hotel-video {
       position: absolute; inset: 0;
       width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(.65) saturate(1.1);
+      filter: brightness(.62) saturate(1.1);
+      transition: filter .4s;
     }
+    #video-section.paused #hotel-video { filter: brightness(.4) saturate(1); }
     .video-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(8,17,31,.85) 0%, transparent 60%);
+      background: linear-gradient(to top, rgba(8,17,31,.92) 0%, rgba(8,17,31,.1) 55%, transparent 100%);
+      pointer-events: none;
     }
-    .video-content {
-      position: relative; z-index: 2;
-      padding: 0 60px 70px;
+    /* big centre play icon shown when paused */
+    .video-play-icon {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
     }
+    #video-section.paused .video-play-icon { opacity: 1; }
+    .video-play-icon svg {
+      width: 72px; height: 72px;
+      stroke: rgba(191,160,106,.85); fill: none; stroke-width: 1;
+      filter: drop-shadow(0 0 20px rgba(0,0,0,.6));
+    }
+    /* bottom controls bar */
+    .video-controls {
+      position: relative; z-index: 4;
+      width: 100%; padding: 0 48px 36px;
+    }
+    .video-top-label {
+      padding: 0 48px; position: relative; z-index: 4;
+      margin-bottom: 16px;
+    }
+    /* progress bar */
+    .video-progress {
+      width: 100%; height: 2px;
+      background: rgba(255,255,255,.15);
+      margin-bottom: 18px; cursor: none; position: relative;
+    }
+    .video-progress-fill {
+      height: 100%; width: 0%;
+      background: var(--gold);
+      transition: width .2s linear;
+      pointer-events: none;
+    }
+    .video-progress-thumb {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--gold);
+      position: absolute; top: 50%; transform: translate(-50%,-50%);
+      left: 0%; opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none;
+    }
+    .video-progress:hover .video-progress-thumb { opacity: 1; }
+    /* buttons row */
+    .video-btn-row {
+      display: flex; align-items: center; gap: 20px;
+    }
+    .vid-btn {
+      background: none; border: none; cursor: none; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .2s;
+    }
+    .vid-btn:hover { opacity: .7; }
+    .vid-btn svg { width: 20px; height: 20px; stroke: var(--cream); fill: none; stroke-width: 1.5; }
+    .vid-btn.play-pause svg { width: 26px; height: 26px; }
+    .video-time {
+      font-size: .55rem; letter-spacing: .12em; color: rgba(240,234,224,.55);
+      margin-left: 4px;
+    }
+    .video-section-label {
+      margin-left: auto;
+      font-size: .5rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .vid-btn.fullscreen svg { width: 18px; }
+
+    /* ── REVIEWS SECTION ── */
+    #reviews { padding: 120px 0; background: var(--deep); overflow: hidden; }
+    .reviews-header { padding: 0 60px 60px; display: flex; align-items: flex-end; justify-content: space-between; }
+    .reviews-nav { display: flex; gap: 10px; }
+    .rev-arrow {
+      width: 44px; height: 44px; border: 1px solid rgba(191,160,106,.25);
+      background: none; cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .25s, background .25s;
+    }
+    .rev-arrow:hover { border-color: var(--gold); background: rgba(191,160,106,.08); }
+    .rev-arrow svg { width: 16px; stroke: var(--cream); stroke-width: 1.5; fill: none; }
+    .reviews-track-wrap { overflow: hidden; }
+    .reviews-track {
+      display: flex; gap: 24px; padding: 0 60px;
+      transition: transform .65s cubic-bezier(.77,0,.175,1);
+      will-change: transform;
+    }
+    .review-card {
+      flex: 0 0 380px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(191,160,106,.1);
+      padding: 40px 36px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .review-stars { display: flex; gap: 5px; }
+    .review-stars span { color: var(--gold); font-size: .9rem; }
+    .review-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; line-height: 1.7; font-weight: 300;
+      color: rgba(240,234,224,.85); flex: 1;
+    }
+    .review-quote::before { content: '\201C'; color: var(--gold); font-size: 2rem; line-height: 0; vertical-align: -.5rem; margin-right: 4px; }
+    .review-author { display: flex; flex-direction: column; gap: 4px; }
+    .review-name {
+      font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--cream);
+    }
+    .review-origin { font-size: .55rem; letter-spacing: .15em; color: var(--grey); }
+
+    /* ── MODAL TABS ── */
+    .res-tabs {
+      display: flex; gap: 0; margin-bottom: 24px;
+      border-bottom: 1px solid rgba(191,160,106,.15);
+    }
+    .res-tab {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--grey); background: none; border: none;
+      padding: 10px 0; margin-right: 28px; cursor: none;
+      border-bottom: 2px solid transparent;
+      transition: color .25s, border-color .25s;
+    }
+    .res-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+    /* review form inside modal */
+    #res-review-wrap { display: none; }
+    #res-review-wrap.active { display: block; }
+    #res-form-wrap.hidden { display: none; }
+    .star-picker { display: flex; gap: 8px; margin-bottom: 4px; }
+    .star-picker button {
+      background: none; border: none; cursor: none;
+      font-size: 1.4rem; color: rgba(191,160,106,.3);
+      transition: color .2s; padding: 0;
+    }
+    .star-picker button.lit { color: var(--gold); }
+    .review-success { display: none; text-align: center; padding: 32px 0; }
+    .review-success.show { display: block; }
+    .review-success svg { width: 44px; stroke: var(--gold); fill: none; stroke-width: 1.5; margin-bottom: 16px; }
+    .review-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--white); margin-bottom: 8px; }
+    .review-success p { font-size: .58rem; letter-spacing: .12em; color: var(--grey); line-height: 2; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
@@ -829,7 +965,7 @@
     <a class="nav-logo" href="#">The <span>Blue</span> Citadel</a>
     <ul class="nav-links">
       <li><a href="#vision">Story</a></li>
-      <li><a href="#rooms">Rooms</a></li>
+      <li><a href="#rooms">Room</a></li>
       <li><a href="#amenities">Amenities</a></li>
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#booking">Contact</a></li>
@@ -925,28 +1061,26 @@
   <section id="rooms">
     <div class="rooms-header">
       <div>
-        <div class="section-tag reveal">Accommodations</div>
+        <div class="section-tag reveal">The Room</div>
         <h2 class="section-title reveal reveal-delay-1">
-          Curated<br/>
-          <em>Sanctuaries</em>
+          Your Private<br/>
+          <em>Sanctuary</em>
         </h2>
       </div>
       <p class="rooms-header-right reveal reveal-delay-2">
-        Each room and suite has been designed as a complete world unto itself — a private universe of warmth, texture and sea-whispered silence.
+        Designed as a complete world unto itself — a private universe of warmth, texture and sea-whispered silence.
       </p>
     </div>
-    <div class="rooms-grid">
+    <div class="rooms-grid rooms-grid--single">
       <div class="room-card reveal">
-        <img src="img4.jpeg" alt="Sea View Suite" />
+        <img src="img4.jpeg" alt="The Room" />
         <div class="room-overlay">
-          <div class="room-cat">Signature Suite</div>
-          <div class="room-name">Sea View<br/>Arched Suite</div>
+          <div class="room-cat">The Room</div>
+          <div class="room-name">Bedroom &<br/>Sea View</div>
           <div class="room-detail">
-            <span>72 m²</span>
-            <span>·</span>
             <span>Sea View</span>
             <span>·</span>
-            <span>From $1,200/night</span>
+            <span>Private Terrace</span>
           </div>
         </div>
         <div class="room-link">
@@ -955,14 +1089,14 @@
       </div>
 
       <div class="room-card reveal reveal-delay-1">
-        <img src="img3.jpeg" alt="Deluxe Room" />
+        <img src="img5.jpeg" alt="The Bathroom" />
         <div class="room-overlay">
-          <div class="room-cat">Deluxe Room</div>
-          <div class="room-name">The Citadel<br/>Retreat</div>
+          <div class="room-cat">The Room</div>
+          <div class="room-name">Marble<br/>Bathroom</div>
           <div class="room-detail">
-            <span>45 m²</span>
+            <span>Freestanding Tub</span>
             <span>·</span>
-            <span>Garden View</span>
+            <span>Dark Marble</span>
           </div>
         </div>
         <div class="room-link">
@@ -970,13 +1104,13 @@
         </div>
       </div>
 
-      <div class="room-card reveal reveal-delay-2">
-        <img src="img5.jpeg" alt="Spa Suite Bathroom" />
+      <div class="room-card reveal reveal-delay-2" style="display:none;">
+        <img src="img5.jpeg" alt="placeholder" />
         <div class="room-overlay">
-          <div class="room-cat">Spa Suite</div>
-          <div class="room-name">Marble & Oak<br/>Sanctuary</div>
+          <div class="room-cat">The Room</div>
+          <div class="room-name">placeholder</div>
           <div class="room-detail">
-            <span>Private Terrace</span>
+            <span>placeholder</span>
             <span>·</span>
             <span>Plunge Bath</span>
           </div>
@@ -1015,13 +1149,54 @@
 
   <!-- VIDEO SECTION -->
   <section id="video-section">
-    <video autoplay muted loop playsinline id="hotel-video">
+    <video autoplay muted playsinline id="hotel-video">
       <source src="hotel.mp4" type="video/mp4" />
     </video>
     <div class="video-overlay"></div>
-    <div class="video-content">
-      <div class="section-tag reveal">A Glimpse Inside</div>
-      <h2 class="section-title reveal reveal-delay-1">Feel the<br/><em>Atmosphere</em></h2>
+
+    <!-- big centre pause indicator -->
+    <div class="video-play-icon">
+      <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="38"/><polygon points="32,25 32,55 58,40" fill="rgba(191,160,106,.85)" stroke="none"/></svg>
+    </div>
+
+    <!-- controls -->
+    <div class="video-controls">
+      <div class="section-tag reveal" style="margin-bottom:12px;">A Glimpse Inside</div>
+      <h2 class="section-title reveal reveal-delay-1" style="margin-bottom:24px;">Feel the <em>Atmosphere</em></h2>
+
+      <!-- progress -->
+      <div class="video-progress" id="vid-progress">
+        <div class="video-progress-fill" id="vid-fill"></div>
+        <div class="video-progress-thumb" id="vid-thumb"></div>
+      </div>
+
+      <!-- buttons -->
+      <div class="video-btn-row">
+        <!-- rewind 10s -->
+        <button class="vid-btn" id="vid-rewind" title="Rewind 10s">
+          <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/><text x="8" y="15" font-size="6" fill="white" stroke="none" font-family="sans-serif">10</text></svg>
+        </button>
+        <!-- play/pause -->
+        <button class="vid-btn play-pause" id="vid-playpause" title="Play / Pause">
+          <svg viewBox="0 0 24 24" id="vid-pp-icon"><rect x="6" y="4" width="4" height="16" fill="var(--cream)" stroke="none"/><rect x="14" y="4" width="4" height="16" fill="var(--cream)" stroke="none"/></svg>
+        </button>
+        <!-- forward 10s -->
+        <button class="vid-btn" id="vid-forward" title="Forward 10s">
+          <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-4.5"/><text x="8" y="15" font-size="6" fill="white" stroke="none" font-family="sans-serif">10</text></svg>
+        </button>
+        <!-- time -->
+        <span class="video-time" id="vid-time">0:00 / 0:00</span>
+        <!-- spacer -->
+        <span class="video-section-label">Blue Citadel</span>
+        <!-- mute -->
+        <button class="vid-btn" id="vid-mute" title="Mute / Unmute">
+          <svg viewBox="0 0 24 24" id="vid-mute-icon"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="var(--cream)" stroke="none"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        </button>
+        <!-- fullscreen -->
+        <button class="vid-btn fullscreen" id="vid-fullscreen" title="Fullscreen">
+          <svg viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -1144,6 +1319,49 @@
     </div>
   </section>
 
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="reviews-header">
+      <div>
+        <div class="section-tag reveal">Guest Voices</div>
+        <h2 class="section-title reveal reveal-delay-1">What They<br/><em>Remember</em></h2>
+      </div>
+      <div class="reviews-nav">
+        <button class="rev-arrow" id="rev-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="rev-arrow" id="rev-next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      </div>
+    </div>
+    <div class="reviews-track-wrap">
+      <div class="reviews-track" id="reviews-track">
+        <div class="review-card reveal">
+          <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+          <p class="review-quote">Waking up to the Mediterranean every morning felt like a dream we never wanted to leave. The silence, the light, the warmth of everything around us — truly extraordinary.</p>
+          <div class="review-author"><span class="review-name">Layla & Omar K.</span><span class="review-origin">Dubai, UAE</span></div>
+        </div>
+        <div class="review-card reveal reveal-delay-1">
+          <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+          <p class="review-quote">The architecture alone is worth the journey. But it's the feeling of stillness — a rarity in this world — that made The Blue Citadel unlike anywhere we have ever stayed.</p>
+          <div class="review-author"><span class="review-name">Sophie M.</span><span class="review-origin">Paris, France</span></div>
+        </div>
+        <div class="review-card reveal reveal-delay-2">
+          <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+          <p class="review-quote">The marble bathroom alone deserves its own review. Everything about this place speaks of care, intention, and a deep love for beauty. We will be back.</p>
+          <div class="review-author"><span class="review-name">James & Clara T.</span><span class="review-origin">London, UK</span></div>
+        </div>
+        <div class="review-card reveal">
+          <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+          <p class="review-quote">From the moment we arrived in the lobby, time slowed down. The sea view from our room, the amber light at dusk — it all felt curated just for us.</p>
+          <div class="review-author"><span class="review-name">Nour A.</span><span class="review-origin">Cairo, Egypt</span></div>
+        </div>
+        <div class="review-card reveal reveal-delay-1">
+          <div class="review-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+          <p class="review-quote">A hotel that understands luxury is not about excess, but about precision. Every detail at The Blue Citadel is considered. A masterpiece of hospitality.</p>
+          <div class="review-author"><span class="review-name">Khalid R.</span><span class="review-origin">Riyadh, KSA</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- BOOKING / CTA -->
   <section id="booking">
     <div class="booking-bg"></div>
@@ -1255,8 +1473,14 @@
           <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
 
+        <!-- Tabs -->
+        <div class="res-tabs">
+          <button class="res-tab active" id="tab-reserve" onclick="switchTab('reserve')">Reserve</button>
+          <button class="res-tab" id="tab-review" onclick="switchTab('review')">Leave a Review</button>
+        </div>
+
         <div id="res-form-wrap">
-          <h2 class="res-title">Reserve Your<br/><em>Suite</em></h2>
+          <h2 class="res-title">Reserve Your<br/><em>Stay</em></h2>
           <span class="res-sub">Complimentary cancellation up to 48 hours prior</span>
 
           <form id="res-form" onsubmit="submitReservation(event)">
@@ -1329,6 +1553,54 @@
           <h3>Request Received</h3>
           <p>Thank you. Our team will<br/>be in touch to confirm your reservation.</p>
         </div>
+
+        <!-- REVIEW PANEL -->
+        <div id="res-review-wrap">
+          <h2 class="res-title">Share Your<br/><em>Experience</em></h2>
+          <span class="res-sub">Your words help future guests find their sanctuary</span>
+
+          <form id="rev-form" onsubmit="submitReview(event)">
+            <div class="res-row">
+              <div class="res-field">
+                <label>Your Name</label>
+                <input type="text" placeholder="Sarah" required />
+              </div>
+              <div class="res-field">
+                <label>Where From</label>
+                <input type="text" placeholder="Cairo, Egypt" />
+              </div>
+            </div>
+
+            <div class="res-row single">
+              <div class="res-field">
+                <label>Rating</label>
+                <div class="star-picker" id="star-picker">
+                  <button type="button" data-star="1">★</button>
+                  <button type="button" data-star="2">★</button>
+                  <button type="button" data-star="3">★</button>
+                  <button type="button" data-star="4">★</button>
+                  <button type="button" data-star="5">★</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="res-row single">
+              <div class="res-field">
+                <label>Your Review</label>
+                <textarea placeholder="Tell us about your stay at The Blue Citadel…" style="height:110px;" required></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="res-submit" style="margin-top:16px;">Submit Review</button>
+          </form>
+
+          <div class="review-success" id="rev-success">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <h3>Thank You</h3>
+            <p>Your review means the world to us.<br/>We look forward to welcoming you again.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1435,6 +1707,63 @@
       requestAnimationFrame(() => { goTo(0); startAuto(); });
     };
 
+    // Modal tabs
+    function switchTab(tab) {
+      const isReserve = tab === 'reserve';
+      document.getElementById('tab-reserve').classList.toggle('active', isReserve);
+      document.getElementById('tab-review').classList.toggle('active', !isReserve);
+      document.getElementById('res-form-wrap').classList.toggle('hidden', !isReserve);
+      document.getElementById('res-review-wrap').classList.toggle('active', !isReserve);
+    }
+
+    // Star picker
+    let chosenStars = 0;
+    document.getElementById('star-picker').addEventListener('click', e => {
+      const btn = e.target.closest('[data-star]');
+      if (!btn) return;
+      chosenStars = +btn.dataset.star;
+      document.querySelectorAll('#star-picker button').forEach((b, i) =>
+        b.classList.toggle('lit', i < chosenStars));
+    });
+    document.getElementById('star-picker').addEventListener('mouseover', e => {
+      const btn = e.target.closest('[data-star]');
+      if (!btn) return;
+      const n = +btn.dataset.star;
+      document.querySelectorAll('#star-picker button').forEach((b, i) =>
+        b.classList.toggle('lit', i < n));
+    });
+    document.getElementById('star-picker').addEventListener('mouseleave', () => {
+      document.querySelectorAll('#star-picker button').forEach((b, i) =>
+        b.classList.toggle('lit', i < chosenStars));
+    });
+
+    function submitReview(e) {
+      e.preventDefault();
+      document.getElementById('rev-form').style.display = 'none';
+      document.getElementById('rev-success').classList.add('show');
+      setTimeout(closeModal, 3000);
+      setTimeout(() => {
+        document.getElementById('rev-form').style.display = '';
+        document.getElementById('rev-success').classList.remove('show');
+        document.getElementById('rev-form').reset();
+        chosenStars = 0;
+        document.querySelectorAll('#star-picker button').forEach(b => b.classList.remove('lit'));
+        switchTab('reserve');
+      }, 3400);
+    }
+
+    // Reviews carousel
+    const revTrack = document.getElementById('reviews-track');
+    const revCards = revTrack.querySelectorAll('.review-card');
+    let revIdx = 0;
+    function getRevCardW() { return revCards[0].offsetWidth + 24; }
+    function revGoTo(idx) {
+      revIdx = Math.max(0, Math.min(idx, revCards.length - 1));
+      revTrack.style.transform = `translateX(-${revIdx * getRevCardW()}px)`;
+    }
+    document.getElementById('rev-prev').addEventListener('click', () => revGoTo(revIdx - 1));
+    document.getElementById('rev-next').addEventListener('click', () => revGoTo(revIdx + 1));
+
     // Nav scroll
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
@@ -1494,6 +1823,87 @@
         heroImg.style.transform = `scale(1) translateY(${window.scrollY * 0.3}px)`;
       }
     });
+
+    // ── VIDEO PLAYER ──
+    const vid       = document.getElementById('hotel-video');
+    const vidSec    = document.getElementById('video-section');
+    const fill      = document.getElementById('vid-fill');
+    const thumb     = document.getElementById('vid-thumb');
+    const progress  = document.getElementById('vid-progress');
+    const timeEl    = document.getElementById('vid-time');
+    const ppBtn     = document.getElementById('vid-playpause');
+    const ppIcon    = document.getElementById('vid-pp-icon');
+    const muteBtn   = document.getElementById('vid-mute');
+    const muteIcon  = document.getElementById('vid-mute-icon');
+
+    function fmt(s) {
+      const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+      return m + ':' + String(sec).padStart(2,'0');
+    }
+
+    const playIcon  = `<polygon points="5 3 19 12 5 21 5 3" fill="var(--cream)" stroke="none"/>`;
+    const pauseIcon = `<rect x="6" y="4" width="4" height="16" fill="var(--cream)" stroke="none"/><rect x="14" y="4" width="4" height="16" fill="var(--cream)" stroke="none"/>`;
+    const muteOnIcon  = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="var(--cream)" stroke="none"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>`;
+    const muteOffIcon = `<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="var(--cream)" stroke="none"/><line x1="23" y1="9" x2="17" y2="15" stroke="var(--cream)" stroke-width="2"/><line x1="17" y1="9" x2="23" y2="15" stroke="var(--cream)" stroke-width="2"/>`;
+
+    function setPlaying(playing) {
+      ppIcon.innerHTML = playing ? pauseIcon : playIcon;
+      vidSec.classList.toggle('paused', !playing);
+    }
+
+    // toggle play/pause on click anywhere in section or button
+    function togglePlay() {
+      vid.paused ? vid.play() : vid.pause();
+    }
+    vidSec.addEventListener('click', e => {
+      if (!e.target.closest('.vid-btn') && !e.target.closest('.video-progress')) togglePlay();
+    });
+    ppBtn.addEventListener('click', togglePlay);
+    vid.addEventListener('play',  () => setPlaying(true));
+    vid.addEventListener('pause', () => setPlaying(false));
+
+    // progress update
+    vid.addEventListener('timeupdate', () => {
+      if (!vid.duration) return;
+      const pct = (vid.currentTime / vid.duration) * 100;
+      fill.style.width  = pct + '%';
+      thumb.style.left  = pct + '%';
+      timeEl.textContent = fmt(vid.currentTime) + ' / ' + fmt(vid.duration);
+    });
+
+    // click progress bar to seek
+    progress.addEventListener('click', e => {
+      const rect = progress.getBoundingClientRect();
+      vid.currentTime = ((e.clientX - rect.left) / rect.width) * vid.duration;
+    });
+
+    // drag to scrub
+    let scrubbing = false;
+    progress.addEventListener('mousedown', () => scrubbing = true);
+    document.addEventListener('mousemove', e => {
+      if (!scrubbing) return;
+      const rect = progress.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      vid.currentTime = pct * vid.duration;
+    });
+    document.addEventListener('mouseup', () => scrubbing = false);
+
+    // skip buttons
+    document.getElementById('vid-rewind').addEventListener('click',  () => { vid.currentTime = Math.max(0, vid.currentTime - 10); });
+    document.getElementById('vid-forward').addEventListener('click', () => { vid.currentTime = Math.min(vid.duration, vid.currentTime + 10); });
+
+    // mute toggle
+    muteBtn.addEventListener('click', () => {
+      vid.muted = !vid.muted;
+      muteIcon.innerHTML = vid.muted ? muteOffIcon : muteOnIcon;
+    });
+
+    // fullscreen
+    document.getElementById('vid-fullscreen').addEventListener('click', () => {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else vidSec.requestFullscreen();
+    });
+
   </script>
 </body>
 </html>
