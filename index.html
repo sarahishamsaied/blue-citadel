@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Blue Citadel — A Sanctuary at Sea</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:   #08111F;
+      --deep:   #0D1B2E;
+      --blue:   #112240;
+      --gold:   #BFA06A;
+      --gold2:  #D4B896;
+      --cream:  #F0EAE0;
+      --white:  #FAFAF8;
+      --grey:   #8A8A8A;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--cream);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      will-change: transform;
+      transition: width .15s, height .15s;
+    }
+    #cursor-ring {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(191,160,106,.55);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      will-change: transform;
+      transition: width .15s, height .15s;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      padding: 28px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .5s, padding .4s;
+    }
+    nav.scrolled {
+      background: rgba(8,17,31,.9);
+      backdrop-filter: blur(18px);
+      padding: 18px 60px;
+      border-bottom: 1px solid rgba(191,160,106,.15);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 400; letter-spacing: .3em;
+      color: var(--gold); text-transform: uppercase; text-decoration: none;
+    }
+    .nav-logo span { color: var(--cream); }
+    .nav-links { display: flex; gap: 44px; list-style: none; }
+    .nav-links a {
+      font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(240,234,224,.65); text-decoration: none;
+      transition: color .3s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width .35s ease;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--navy); background: var(--gold);
+      border: none; padding: 13px 28px; cursor: none;
+      transition: background .3s, transform .2s;
+    }
+    .nav-btn:hover { background: var(--gold2); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; width: 100vw; height: 100vh;
+      overflow: hidden; display: flex; align-items: flex-end;
+    }
+    .hero-img {
+      position: absolute; inset: 0;
+      background: url('img6.png') center/cover no-repeat;
+      transform: scale(1.08);
+      transition: transform 12s ease;
+      filter: brightness(.55) saturate(1.1);
+    }
+    #hero.loaded .hero-img { transform: scale(1); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,17,31,.92) 0%, rgba(8,17,31,.25) 55%, transparent 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 60px 80px;
+      max-width: 900px;
+    }
+    .hero-tag {
+      font-size: .58rem; letter-spacing: .35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .hero-tag::before {
+      content: ''; width: 40px; height: 1px; background: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 8vw, 9rem);
+      font-weight: 300; line-height: .92;
+      color: var(--white); margin-bottom: 32px;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(240,234,224,.6); max-width: 380px; line-height: 2.2;
+      margin-bottom: 48px;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 16px;
+      font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--cream); text-decoration: none;
+      transition: gap .3s;
+    }
+    .hero-cta:hover { gap: 24px; color: var(--gold); }
+    .hero-cta-line {
+      width: 50px; height: 1px; background: var(--gold);
+      transition: width .3s;
+    }
+    .hero-cta:hover .hero-cta-line { width: 70px; }
+    .hero-scroll {
+      position: absolute; right: 60px; bottom: 80px; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      font-size: .55rem; letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(240,234,224,.4);
+    }
+    .scroll-line {
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollAnim 2s infinite;
+    }
+    @keyframes scrollAnim {
+      0% { opacity: 0; transform: translateY(-10px); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(10px); }
+    }
+    .hero-stats {
+      position: absolute; right: 60px; top: 50%;
+      transform: translateY(-50%); z-index: 3;
+      display: flex; flex-direction: column; gap: 32px;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; color: var(--gold); line-height: 1;
+      display: block;
+    }
+    .stat-label {
+      font-size: .5rem; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(240,234,224,.45); display: block; margin-top: 4px;
+    }
+    .stat-sep {
+      width: 1px; height: 24px; background: rgba(191,160,106,.2);
+      margin: 0 auto;
+    }
+
+    /* ── INTRO MARQUEE ── */
+    .marquee-wrap {
+      background: var(--gold);
+      padding: 18px 0; overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .marquee-track {
+      display: flex; width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .marquee-track span {
+      white-space: nowrap;
+      font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--navy); padding: 0 40px;
+    }
+    .marquee-dot {
+      font-size: 1rem; vertical-align: middle;
+      color: rgba(8,17,31,.4); padding: 0 10px;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { position: relative; }
+    .section-tag {
+      font-size: .55rem; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--gold); display: flex; align-items: center; gap: 14px;
+      margin-bottom: 20px;
+    }
+    .section-tag::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5vw, 5.5rem);
+      font-weight: 300; line-height: 1.05; color: var(--white);
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+
+    /* ── VISION ── */
+    #vision {
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+    .vision-img {
+      position: relative; overflow: hidden;
+    }
+    .vision-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.75) saturate(1.15);
+      transition: transform .8s ease;
+    }
+    .vision-img:hover img { transform: scale(1.04); }
+    .vision-img-label {
+      position: absolute; bottom: 40px; left: 40px;
+      font-size: .52rem; letter-spacing: .28em; text-transform: uppercase;
+      color: rgba(240,234,224,.55);
+      border-left: 1px solid rgba(191,160,106,.4); padding-left: 16px;
+    }
+    .vision-text {
+      background: var(--deep);
+      padding: 100px 80px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .vision-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem; line-height: 1.75;
+      color: rgba(240,234,224,.75); margin: 36px 0 50px;
+      font-weight: 300;
+    }
+    .vision-quote {
+      border-left: 2px solid var(--gold);
+      padding-left: 24px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1.1rem;
+      color: rgba(191,160,106,.8); line-height: 1.7;
+    }
+
+    /* ── ROOMS ── */
+    #rooms { padding: 120px 0; background: var(--navy); }
+    .rooms-header {
+      padding: 0 60px 80px;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .rooms-header-right {
+      font-size: .65rem; letter-spacing: .15em; line-height: 2;
+      color: var(--grey); max-width: 320px; text-align: right;
+    }
+    .rooms-grid {
+      display: grid; grid-template-columns: 1.4fr 1fr;
+      grid-template-rows: auto auto; gap: 3px;
+      padding: 0 60px;
+    }
+    .room-card {
+      position: relative; overflow: hidden;
+      cursor: none;
+    }
+    .room-card:first-child { grid-row: 1 / 3; }
+    .room-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform .8s cubic-bezier(.25,.46,.45,.94), filter .5s;
+      filter: brightness(.7) saturate(1.1);
+    }
+    .room-card:first-child img { height: 680px; }
+    .room-card:not(:first-child) img { height: 336px; }
+    .room-card:hover img {
+      transform: scale(1.06);
+      filter: brightness(.55) saturate(1.2);
+    }
+    .room-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,17,31,.9) 0%, transparent 60%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 40px;
+    }
+    .room-cat {
+      font-size: .52rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .room-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 400; color: var(--white);
+      line-height: 1.15; margin-bottom: 16px;
+    }
+    .room-detail {
+      display: flex; gap: 20px;
+      font-size: .55rem; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(240,234,224,.5);
+    }
+    .room-link {
+      position: absolute; top: 32px; right: 32px;
+      width: 44px; height: 44px;
+      border: 1px solid rgba(191,160,106,.4);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(.8);
+      transition: opacity .3s, transform .3s, border-color .3s;
+    }
+    .room-card:hover .room-link {
+      opacity: 1; transform: scale(1);
+      border-color: var(--gold);
+    }
+    .room-link svg { width: 16px; fill: var(--gold); }
+
+    /* ── EXPERIENCE STRIP ── */
+    #experience {
+      background: var(--gold);
+      padding: 80px 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 60px;
+    }
+    .exp-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 4.5rem);
+      color: var(--navy); font-weight: 400; line-height: 1.05;
+      flex-shrink: 0;
+    }
+    .exp-title em { font-style: italic; }
+    .exp-features {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+    }
+    .exp-feat h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: var(--navy); margin-bottom: 8px;
+    }
+    .exp-feat p {
+      font-size: .6rem; letter-spacing: .1em; line-height: 2;
+      color: rgba(8,17,31,.6);
+    }
+    .exp-feat-icon {
+      width: 36px; height: 1px; background: var(--navy);
+      margin-bottom: 16px; opacity: .4;
+    }
+
+    /* ── LOBBY / IMMERSIVE ── */
+    #lobby {
+      position: relative; height: 85vh; overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .lobby-bg {
+      position: absolute; inset: 0;
+      background: url('img1.jpeg') center/cover no-repeat;
+      filter: brightness(.45) saturate(1.1);
+      transform: scale(1.05);
+      transition: transform 18s ease;
+    }
+    #lobby.in-view .lobby-bg { transform: scale(1); }
+    .lobby-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(105deg, rgba(8,17,31,.85) 40%, transparent 100%);
+    }
+    .lobby-content {
+      position: relative; z-index: 2;
+      padding: 0 60px; max-width: 620px;
+    }
+    .lobby-content .section-title { margin-bottom: 28px; }
+    .lobby-body {
+      font-size: .7rem; letter-spacing: .1em; line-height: 2.3;
+      color: rgba(240,234,224,.6); margin-bottom: 44px;
+    }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 14px;
+      font-size: .58rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      border: 1px solid rgba(191,160,106,.4); padding: 16px 32px;
+      transition: background .3s, border-color .3s, color .3s;
+    }
+    .btn-outline:hover {
+      background: var(--gold); color: var(--navy);
+      border-color: var(--gold);
+    }
+
+    /* ── GALLERY ── */
+    #gallery { padding: 120px 0; background: var(--deep); }
+    .gallery-header { padding: 0 60px 60px; }
+    .gallery-scroll-wrap { overflow: hidden; }
+    .gallery-track {
+      display: flex; gap: 20px; padding: 0 60px;
+      width: max-content;
+      animation: galleryScroll 28s linear infinite;
+    }
+    .gallery-track:hover { animation-play-state: paused; }
+    @keyframes galleryScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .gallery-item {
+      flex-shrink: 0; position: relative; overflow: hidden;
+      cursor: none;
+    }
+    .gallery-item:nth-child(odd) { height: 380px; width: 580px; }
+    .gallery-item:nth-child(even) { height: 380px; width: 380px; }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.75) saturate(1.05);
+      transition: transform .7s ease, filter .5s;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05); filter: brightness(.6) saturate(1.2);
+    }
+    .gallery-item-label {
+      position: absolute; bottom: 24px; left: 24px;
+      font-size: .5rem; letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(240,234,224,.55);
+    }
+
+    /* ── AMENITIES ── */
+    #amenities { padding: 120px 60px; background: var(--navy); }
+    .amenities-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+      align-items: center;
+    }
+    .amenities-img {
+      position: relative;
+    }
+    .amenities-img img {
+      width: 100%; height: 600px; object-fit: cover;
+      filter: brightness(.8) saturate(1.1);
+    }
+    .amenities-badge {
+      position: absolute; bottom: -28px; right: -28px;
+      width: 120px; height: 120px;
+      background: var(--gold);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 4px;
+    }
+    .badge-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem; color: var(--navy); line-height: 1;
+    }
+    .badge-label {
+      font-size: .45rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--navy); text-align: center; opacity: .7;
+    }
+    .amenities-list { display: flex; flex-direction: column; gap: 0; }
+    .amenity-item {
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      display: flex; align-items: flex-start; gap: 24px;
+      transition: padding-left .3s;
+    }
+    .amenity-item:hover { padding-left: 12px; }
+    .amenity-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--gold); opacity: .6;
+      flex-shrink: 0; padding-top: 2px;
+    }
+    .amenity-info h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem; color: var(--white); margin-bottom: 6px;
+    }
+    .amenity-info p {
+      font-size: .58rem; letter-spacing: .1em; line-height: 1.9;
+      color: var(--grey);
+    }
+
+    /* ── BOOKING ── */
+    #booking {
+      position: relative; overflow: hidden;
+      padding: 140px 60px; text-align: center;
+      background: var(--blue);
+    }
+    .booking-bg {
+      position: absolute; inset: 0;
+      background: url('img6.png') center/cover no-repeat;
+      filter: brightness(.2) saturate(1.1);
+      transform: scale(1.05);
+    }
+    .booking-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(8,17,31,.6) 0%, rgba(8,17,31,.95) 100%);
+    }
+    .booking-content { position: relative; z-index: 2; }
+    .booking-tag {
+      font-size: .55rem; letter-spacing: .4em; text-transform: uppercase;
+      color: var(--gold); display: block; margin-bottom: 24px;
+    }
+    .booking-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 7rem); font-weight: 300;
+      color: var(--white); line-height: .95; margin-bottom: 20px;
+    }
+    .booking-title em { font-style: italic; color: var(--gold); }
+    .booking-sub {
+      font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(240,234,224,.45); margin-bottom: 60px;
+    }
+    .booking-form {
+      display: inline-flex; background: rgba(255,255,255,.04);
+      border: 1px solid rgba(191,160,106,.2);
+      backdrop-filter: blur(10px);
+    }
+    .form-field {
+      padding: 24px 32px; border-right: 1px solid rgba(191,160,106,.15);
+      text-align: left; min-width: 180px;
+    }
+    .form-field label {
+      display: block; font-size: .48rem; letter-spacing: .25em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+    }
+    .form-field input {
+      background: transparent; border: none; outline: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; color: var(--white); width: 100%;
+      cursor: none;
+    }
+    .form-field input::placeholder { color: rgba(240,234,224,.35); }
+    .form-submit {
+      padding: 24px 44px;
+      background: var(--gold); border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .58rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--navy); cursor: none;
+      transition: background .3s;
+    }
+    .form-submit:hover { background: var(--gold2); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(191,160,106,.1);
+      padding: 80px 60px 50px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 60px; margin-bottom: 60px;
+    }
+    .footer-brand .nav-logo {
+      font-size: 1.1rem; display: block; margin-bottom: 20px;
+    }
+    .footer-brand p {
+      font-size: .6rem; letter-spacing: .1em; line-height: 2.2;
+      color: var(--grey); max-width: 250px;
+    }
+    .footer-col h5 {
+      font-size: .52rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 22px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a {
+      font-size: .6rem; letter-spacing: .1em; color: var(--grey);
+      text-decoration: none; transition: color .25s;
+    }
+    .footer-col ul li a:hover { color: var(--cream); }
+    .footer-bottom {
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,.05);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-copy {
+      font-size: .52rem; letter-spacing: .12em; color: var(--grey);
+    }
+    .footer-social { display: flex; gap: 24px; }
+    .footer-social a {
+      font-size: .52rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--grey); text-decoration: none;
+      transition: color .25s;
+    }
+    .footer-social a:hover { color: var(--gold); }
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity .9s cubic-bezier(.25,.46,.45,.94), transform .9s cubic-bezier(.25,.46,.45,.94);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .15s; }
+    .reveal-delay-2 { transition-delay: .3s; }
+    .reveal-delay-3 { transition-delay: .45s; }
+
+    /* ── DIVIDER ── */
+    .gold-divider {
+      width: 60px; height: 1px; background: var(--gold);
+      margin: 36px 0;
+    }
+
+    /* ── RESERVATION MODAL ── */
+    #res-modal {
+      position: fixed; inset: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .4s ease;
+    }
+    #res-modal.open { opacity: 1; pointer-events: all; }
+    .res-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(5,10,20,.88);
+      backdrop-filter: blur(12px);
+    }
+    .res-panel {
+      position: relative; z-index: 2;
+      width: min(780px, 95vw);
+      max-height: 92vh;
+      background: var(--deep);
+      border: 1px solid rgba(191,160,106,.18);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      transform: translateY(24px);
+      transition: transform .45s cubic-bezier(.25,.46,.45,.94);
+    }
+    #res-modal.open .res-panel { transform: translateY(0); }
+    .res-sidebar {
+      flex: 0 0 280px; height: 280px;
+      width: 100%;
+      position: relative; overflow: hidden;
+    }
+    /* carousel track: absolutely placed so it can overflow the sidebar */
+    .car-track {
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      display: flex; flex-direction: row;
+      transition: transform .65s cubic-bezier(.77,0,.175,1);
+      will-change: transform;
+    }
+    .car-slide {
+      /* width set by JS to sidebar.offsetWidth */
+      height: 100%;
+      flex-shrink: 0;
+      position: relative;
+      background-size: cover; background-position: center;
+    }
+    .car-slide::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,17,31,.25) 0%, rgba(8,17,31,.88) 100%);
+    }
+    /* info overlay — horizontal layout across the banner */
+    .res-sidebar-text {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      padding: 20px 32px;
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+    }
+    .res-sidebar-text-left { flex: 1; }
+    .res-sidebar-tag {
+      font-size: .48rem; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 6px; display: block;
+    }
+    .res-sidebar-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 300; color: var(--white);
+      line-height: 1.1; margin: 0;
+    }
+    .res-sidebar-text h3 em { font-style: italic; color: var(--gold); }
+    .res-sidebar-text p {
+      font-size: .52rem; letter-spacing: .1em; color: rgba(240,234,224,.5);
+      line-height: 1.8; margin: 0; text-align: right; white-space: nowrap;
+    }
+    /* dots */
+    .car-dots {
+      display: flex; gap: 8px;
+    }
+    .car-dot {
+      width: 18px; height: 2px; background: rgba(255,255,255,.3);
+      cursor: none; transition: background .3s, width .3s;
+      border: none;
+    }
+    .car-dot.active { background: var(--gold); width: 28px; }
+    /* prev / next arrows */
+    .car-arrows {
+      position: absolute; bottom: 20px; right: 32px; z-index: 3;
+      display: flex; gap: 8px;
+    }
+    .car-arrow {
+      width: 30px; height: 30px;
+      border: 1px solid rgba(191,160,106,.3);
+      background: rgba(8,17,31,.45); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      cursor: none; transition: border-color .25s, background .25s;
+    }
+    .car-arrow:hover { border-color: var(--gold); background: rgba(191,160,106,.15); }
+    .car-arrow svg { width: 12px; stroke: var(--cream); stroke-width: 1.5; fill: none; }
+    .res-body { flex: 1; min-height: 0; padding: 32px 36px 28px; overflow-y: auto; }
+    .res-close {
+      position: absolute; top: 20px; right: 20px; z-index: 10;
+      width: 36px; height: 36px; border: 1px solid rgba(191,160,106,.25);
+      background: none; cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .25s, background .25s;
+    }
+    .res-close:hover { border-color: var(--gold); background: rgba(191,160,106,.1); }
+    .res-close svg { width: 14px; stroke: var(--cream); stroke-width: 1.5; }
+    .res-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300; color: var(--white);
+      margin-bottom: 4px; display: inline;
+    }
+    .res-title em { font-style: italic; color: var(--gold); }
+    .res-sub {
+      font-size: .52rem; letter-spacing: .15em; color: var(--grey);
+      margin-bottom: 20px; display: block; margin-top: 4px;
+    }
+    .res-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .res-divider { height: 1px; background: rgba(191,160,106,.1); margin: 14px 0; }
+    .res-row.single { grid-template-columns: 1fr; }
+    .res-field { display: flex; flex-direction: column; gap: 6px; }
+    .res-field label {
+      font-size: .5rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .res-field input,
+    .res-field select,
+    .res-field textarea {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(191,160,106,.15);
+      color: var(--cream); padding: 13px 16px;
+      font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+      outline: none; cursor: none; width: 100%;
+      transition: border-color .25s;
+      -webkit-appearance: none;
+    }
+    .res-field select option { background: var(--deep); color: var(--cream); }
+    .res-field input:focus,
+    .res-field select:focus,
+    .res-field textarea:focus { border-color: rgba(191,160,106,.6); }
+    .res-field input::placeholder,
+    .res-field textarea::placeholder { color: rgba(240,234,224,.25); font-style: italic; }
+    .res-field textarea { resize: none; height: 68px; }
+    .res-field input, .res-field select { padding: 11px 14px; }
+    .res-submit {
+      width: 100%; padding: 16px;
+      background: var(--gold); border: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--navy); cursor: none; margin-top: 20px;
+      transition: background .3s, transform .2s;
+    }
+    .res-submit:hover { background: var(--gold2); transform: translateY(-1px); }
+    .res-success {
+      display: none; text-align: center; padding: 40px 0;
+    }
+    .res-success.show { display: block; }
+    .res-success-icon {
+      width: 56px; height: 56px; border: 1px solid var(--gold);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .res-success-icon svg { width: 22px; stroke: var(--gold); stroke-width: 1.5; fill: none; }
+    .res-success h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; color: var(--white); margin-bottom: 10px;
+    }
+    .res-success p { font-size: .6rem; letter-spacing: .12em; color: var(--grey); line-height: 2; }
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '›'; position: absolute; right: 16px; top: 50%;
+      transform: translateY(-50%) rotate(90deg);
+      color: var(--gold); pointer-events: none; font-size: 1rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 0 24px 60px; }
+      .hero-stats { display: none; }
+      .hero-scroll { right: 24px; bottom: 60px; }
+      #vision { grid-template-columns: 1fr; }
+      .vision-text { padding: 60px 24px; }
+      .rooms-grid { grid-template-columns: 1fr; padding: 0 24px; }
+      .room-card:first-child { grid-row: auto; }
+      .room-card:first-child img, .room-card:not(:first-child) img { height: 320px; }
+      #experience { flex-direction: column; padding: 60px 24px; }
+      .exp-features { grid-template-columns: 1fr; }
+      .amenities-inner { grid-template-columns: 1fr; }
+      .amenities-badge { right: 0; bottom: -20px; }
+      .booking-form { flex-direction: column; width: 100%; max-width: 400px; }
+      .form-field { border-right: none; border-bottom: 1px solid rgba(191,160,106,.15); min-width: auto; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      #amenities { padding: 80px 24px; }
+      #booking { padding: 80px 24px; }
+      footer { padding: 60px 24px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a class="nav-logo" href="#">The <span>Blue</span> Citadel</a>
+    <ul class="nav-links">
+      <li><a href="#vision">Story</a></li>
+      <li><a href="#rooms">Rooms</a></li>
+      <li><a href="#amenities">Amenities</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#booking">Contact</a></li>
+    </ul>
+    <button class="nav-btn">Reserve Now</button>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-img"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">180°</span>
+        <span class="stat-label">Sea Views</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <span class="stat-num">5★</span>
+        <span class="stat-label">Ultra Luxury</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat">
+        <span class="stat-num">64</span>
+        <span class="stat-label">Suites</span>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-tag">Alexandria · Egypt</div>
+      <h1 class="hero-title">
+        Where the<br/>
+        Sea <em>Meets</em><br/>
+        Forever
+      </h1>
+      <p class="hero-sub">An iconic sanctuary perched at the edge of the Mediterranean, where ancient grandeur meets contemporary luxury.</p>
+      <a href="#rooms" class="hero-cta">
+        <span class="hero-cta-line"></span>
+        Discover Your Suite
+      </a>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      Scroll
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>Waterfront Luxury <span class="marquee-dot">◆</span></span>
+      <span>Private Marina <span class="marquee-dot">◆</span></span>
+      <span>Michelin Dining <span class="marquee-dot">◆</span></span>
+      <span>Signature Spa <span class="marquee-dot">◆</span></span>
+      <span>Mediterranean Views <span class="marquee-dot">◆</span></span>
+      <span>Bespoke Experiences <span class="marquee-dot">◆</span></span>
+      <span>Waterfront Luxury <span class="marquee-dot">◆</span></span>
+      <span>Private Marina <span class="marquee-dot">◆</span></span>
+      <span>Michelin Dining <span class="marquee-dot">◆</span></span>
+      <span>Signature Spa <span class="marquee-dot">◆</span></span>
+      <span>Mediterranean Views <span class="marquee-dot">◆</span></span>
+      <span>Bespoke Experiences <span class="marquee-dot">◆</span></span>
+    </div>
+  </div>
+
+  <!-- VISION -->
+  <section id="vision">
+    <div class="vision-img">
+      <img src="img2.png" alt="Blue Citadel Waterfront" />
+      <div class="vision-img-label">The Marina Promenade — Dusk</div>
+    </div>
+    <div class="vision-text">
+      <div class="section-tag reveal">Our Philosophy</div>
+      <h2 class="section-title reveal reveal-delay-1">
+        Architecture<br/>
+        of <em>Silence</em>
+      </h2>
+      <div class="gold-divider reveal reveal-delay-2"></div>
+      <p class="vision-body reveal reveal-delay-2">
+        The Blue Citadel rises from the Mediterranean shoreline as both fortress and sanctuary — its arched colonnades speaking a language older than time, yet tuned to the rhythms of the modern soul.
+        <br/><br/>
+        Every stone, every shadow, every reflection in the still marina waters was considered as an act of devotion to those who seek more than comfort — who seek transformation.
+      </p>
+      <blockquote class="vision-quote reveal reveal-delay-3">
+        "To arrive at The Blue Citadel is to understand, perhaps for the first time, what it means to be truly still."
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ROOMS -->
+  <section id="rooms">
+    <div class="rooms-header">
+      <div>
+        <div class="section-tag reveal">Accommodations</div>
+        <h2 class="section-title reveal reveal-delay-1">
+          Curated<br/>
+          <em>Sanctuaries</em>
+        </h2>
+      </div>
+      <p class="rooms-header-right reveal reveal-delay-2">
+        Each room and suite has been designed as a complete world unto itself — a private universe of warmth, texture and sea-whispered silence.
+      </p>
+    </div>
+    <div class="rooms-grid">
+      <div class="room-card reveal">
+        <img src="img4.jpeg" alt="Sea View Suite" />
+        <div class="room-overlay">
+          <div class="room-cat">Signature Suite</div>
+          <div class="room-name">Sea View<br/>Arched Suite</div>
+          <div class="room-detail">
+            <span>72 m²</span>
+            <span>·</span>
+            <span>Sea View</span>
+            <span>·</span>
+            <span>From $1,200/night</span>
+          </div>
+        </div>
+        <div class="room-link">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="room-card reveal reveal-delay-1">
+        <img src="img3.jpeg" alt="Deluxe Room" />
+        <div class="room-overlay">
+          <div class="room-cat">Deluxe Room</div>
+          <div class="room-name">The Citadel<br/>Retreat</div>
+          <div class="room-detail">
+            <span>45 m²</span>
+            <span>·</span>
+            <span>Garden View</span>
+          </div>
+        </div>
+        <div class="room-link">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="room-card reveal reveal-delay-2">
+        <img src="img5.jpeg" alt="Spa Suite Bathroom" />
+        <div class="room-overlay">
+          <div class="room-cat">Spa Suite</div>
+          <div class="room-name">Marble & Oak<br/>Sanctuary</div>
+          <div class="room-detail">
+            <span>Private Terrace</span>
+            <span>·</span>
+            <span>Plunge Bath</span>
+          </div>
+        </div>
+        <div class="room-link">
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE STRIP -->
+  <section id="experience">
+    <div class="exp-title reveal">
+      Beyond<br/>
+      <em>Ordinary</em>
+    </div>
+    <div class="exp-features">
+      <div class="exp-feat reveal reveal-delay-1">
+        <div class="exp-feat-icon"></div>
+        <h4>Private Marina</h4>
+        <p>Exclusive yacht berthing and concierge services for Mediterranean journeys departing at dawn.</p>
+      </div>
+      <div class="exp-feat reveal reveal-delay-2">
+        <div class="exp-feat-icon"></div>
+        <h4>Citadel Spa</h4>
+        <p>Six treatment rooms with marble thermae pools, ancient Egyptian rituals reborn in modern luxury.</p>
+      </div>
+      <div class="exp-feat reveal reveal-delay-3">
+        <div class="exp-feat-icon"></div>
+        <h4>Corniche Dining</h4>
+        <p>Three signature restaurants celebrating the Mediterranean coast's finest seasonal bounty.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOBBY IMMERSIVE -->
+  <section id="lobby">
+    <div class="lobby-bg"></div>
+    <div class="lobby-overlay"></div>
+    <div class="lobby-content">
+      <div class="section-tag reveal">The Grand Lobby</div>
+      <h2 class="section-title reveal reveal-delay-1">
+        A First<br/>
+        <em>Impression</em><br/>
+        Unforgotten
+      </h2>
+      <p class="lobby-body reveal reveal-delay-2">
+        The lobby of The Blue Citadel is not a corridor, it is an arrival. Warm amber light cascades across travertine floors. The faint scent of oud drifts past your shoulder. Your journey here ends — and something altogether different begins.
+      </p>
+      <a href="#booking" class="btn-outline reveal reveal-delay-3">
+        Plan Your Stay
+        <svg width="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- AUTO-SCROLLING GALLERY -->
+  <section id="gallery">
+    <div class="gallery-header">
+      <div class="section-tag reveal">Visual Journey</div>
+      <h2 class="section-title reveal reveal-delay-1">Life at the<br/><em>Citadel</em></h2>
+    </div>
+    <div class="gallery-scroll-wrap">
+      <div class="gallery-track">
+        <div class="gallery-item">
+          <img src="img6.png" alt="Aerial View" />
+          <span class="gallery-item-label">Aerial — The Estate</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img2.png" alt="Waterfront" />
+          <span class="gallery-item-label">The Marina — Dusk</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img4.jpeg" alt="Suite" />
+          <span class="gallery-item-label">Sea View Suite</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img5.jpeg" alt="Bathroom" />
+          <span class="gallery-item-label">The Marble Bath</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img1.jpeg" alt="Lobby" />
+          <span class="gallery-item-label">Grand Lobby</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img3.jpeg" alt="Room" />
+          <span class="gallery-item-label">Deluxe Retreat</span>
+        </div>
+        <!-- Duplicate for infinite loop -->
+        <div class="gallery-item">
+          <img src="img6.png" alt="Aerial View" />
+          <span class="gallery-item-label">Aerial — The Estate</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img2.png" alt="Waterfront" />
+          <span class="gallery-item-label">The Marina — Dusk</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img4.jpeg" alt="Suite" />
+          <span class="gallery-item-label">Sea View Suite</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img5.jpeg" alt="Bathroom" />
+          <span class="gallery-item-label">The Marble Bath</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img1.jpeg" alt="Lobby" />
+          <span class="gallery-item-label">Grand Lobby</span>
+        </div>
+        <div class="gallery-item">
+          <img src="img3.jpeg" alt="Room" />
+          <span class="gallery-item-label">Deluxe Retreat</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AMENITIES -->
+  <section id="amenities">
+    <div class="amenities-inner">
+      <div class="amenities-img reveal">
+        <img src="img5.jpeg" alt="Luxury Amenities" />
+        <div class="amenities-badge">
+          <span class="badge-num">5</span>
+          <span class="badge-label">Stars of<br/>Excellence</span>
+        </div>
+      </div>
+      <div class="amenities-list">
+        <div class="section-tag reveal">World-Class</div>
+        <h2 class="section-title reveal reveal-delay-1">The Art of<br/><em>Service</em></h2>
+        <div class="gold-divider reveal reveal-delay-1"></div>
+
+        <div class="amenity-item reveal reveal-delay-1">
+          <span class="amenity-num">01</span>
+          <div class="amenity-info">
+            <h4>Citadel Spa & Thermal Baths</h4>
+            <p>12,000 sq ft of pure restoration — heated pools, hammam, cryotherapy, and ancient Egyptian body rituals.</p>
+          </div>
+        </div>
+        <div class="amenity-item reveal reveal-delay-2">
+          <span class="amenity-num">02</span>
+          <div class="amenity-info">
+            <h4>Private Marina & Yacht Club</h4>
+            <p>24 berths for private vessels, full concierge and provisioning, sunset cruises and deep-sea excursions.</p>
+          </div>
+        </div>
+        <div class="amenity-item reveal reveal-delay-3">
+          <span class="amenity-num">03</span>
+          <div class="amenity-info">
+            <h4>Three Signature Restaurants</h4>
+            <p>From seafront Mediterranean dining to intimate Chef's table experiences, guided by a Michelin-starred culinary team.</p>
+          </div>
+        </div>
+        <div class="amenity-item reveal">
+          <span class="amenity-num">04</span>
+          <div class="amenity-info">
+            <h4>Rooftop Infinity Pool</h4>
+            <p>Suspended above the Mediterranean, reflecting the sky and the sea simultaneously at golden hour.</p>
+          </div>
+        </div>
+        <div class="amenity-item reveal">
+          <span class="amenity-num">05</span>
+          <div class="amenity-info">
+            <h4>Butler & Concierge</h4>
+            <p>A dedicated personal butler for every suite, available at any hour, for any desire, without exception.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING / CTA -->
+  <section id="booking">
+    <div class="booking-bg"></div>
+    <div class="booking-overlay"></div>
+    <div class="booking-content">
+      <span class="booking-tag reveal">Reserve Your Escape</span>
+      <h2 class="booking-title reveal reveal-delay-1">
+        Begin Your<br/>
+        <em>Story</em>
+      </h2>
+      <p class="booking-sub reveal reveal-delay-2">The Mediterranean is waiting. So is your suite.</p>
+      <form class="booking-form reveal reveal-delay-3" onsubmit="return false;">
+        <div class="form-field">
+          <label>Arrival</label>
+          <input type="text" placeholder="DD / MM / YYYY" />
+        </div>
+        <div class="form-field">
+          <label>Departure</label>
+          <input type="text" placeholder="DD / MM / YYYY" />
+        </div>
+        <div class="form-field">
+          <label>Guests</label>
+          <input type="text" placeholder="2 Adults" />
+        </div>
+        <button class="form-submit">Check Availability</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="nav-logo" href="#">The <span>Blue</span> Citadel</a>
+        <p>A sanctuary of silence, beauty, and world-class service, perched at the edge of the eternal Mediterranean.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Experience</h5>
+        <ul>
+          <li><a href="#">Rooms & Suites</a></li>
+          <li><a href="#">The Spa</a></li>
+          <li><a href="#">Dining</a></li>
+          <li><a href="#">Marina</a></li>
+          <li><a href="#">Events</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Plan</h5>
+        <ul>
+          <li><a href="#">Reserve</a></li>
+          <li><a href="#">Gallery</a></li>
+          <li><a href="#">Packages</a></li>
+          <li><a href="#">Gift Cards</a></li>
+          <li><a href="#">Weddings</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="#">+20 3 000 0000</a></li>
+          <li><a href="#">stay@bluecitadel.com</a></li>
+          <li><a href="#">Corniche Road</a></li>
+          <li><a href="#">Alexandria, Egypt</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 The Blue Citadel. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="#">Instagram</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Behance</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- RESERVATION MODAL -->
+  <div id="res-modal" role="dialog" aria-modal="true">
+    <div class="res-backdrop" id="res-backdrop"></div>
+    <div class="res-panel">
+      <div class="res-sidebar" id="res-carousel">
+        <div class="car-track" id="car-track">
+          <div class="car-slide" style="background-image:url('img4.jpeg')"></div>
+          <div class="car-slide" style="background-image:url('img3.jpeg')"></div>
+          <div class="car-slide" style="background-image:url('img5.jpeg')"></div>
+          <div class="car-slide" style="background-image:url('img1.jpeg')"></div>
+          <div class="car-slide" style="background-image:url('img2.png')"></div>
+          <div class="car-slide" style="background-image:url('img6.png')"></div>
+        </div>
+        <div class="car-arrows">
+          <button class="car-arrow" id="car-prev" aria-label="Previous">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="car-arrow" id="car-next" aria-label="Next">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div class="res-sidebar-text">
+          <div class="res-sidebar-text-left">
+            <span class="res-sidebar-tag" id="car-tag">Signature Suite</span>
+            <h3 id="car-title">Sea View <em>Arched Suite</em></h3>
+            <div class="car-dots" id="car-dots" style="margin-top:10px;"></div>
+          </div>
+          <p id="car-desc">72 m² · Sea View · from $1,200/night</p>
+        </div>
+      </div>
+      <div class="res-body">
+        <button class="res-close" id="res-close" aria-label="Close">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <div id="res-form-wrap">
+          <h2 class="res-title">Reserve Your<br/><em>Suite</em></h2>
+          <span class="res-sub">Complimentary cancellation up to 48 hours prior</span>
+
+          <form id="res-form" onsubmit="submitReservation(event)">
+            <div class="res-row">
+              <div class="res-field">
+                <label>First Name</label>
+                <input type="text" placeholder="Sarah" required />
+              </div>
+              <div class="res-field">
+                <label>Last Name</label>
+                <input type="text" placeholder="Isham" required />
+              </div>
+            </div>
+
+            <div class="res-row">
+              <div class="res-field">
+                <label>Email Address</label>
+                <input type="email" placeholder="your@email.com" required />
+              </div>
+              <div class="res-field">
+                <label>Phone</label>
+                <input type="tel" placeholder="+20 000 000 0000" />
+              </div>
+            </div>
+
+            <div class="res-divider"></div>
+
+            <div class="res-row">
+              <div class="res-field">
+                <label>Check-in</label>
+                <input type="date" required />
+              </div>
+              <div class="res-field">
+                <label>Check-out</label>
+                <input type="date" required />
+              </div>
+            </div>
+
+            <div class="res-row">
+              <div class="res-field">
+                <label>Suite Type</label>
+                <div class="select-wrap">
+                  <select required>
+                    <option value="" disabled selected>Select a suite</option>
+                    <option>Sea View Arched Suite — from $1,200/night</option>
+                    <option>The Citadel Retreat — from $800/night</option>
+                    <option>Marble & Oak Sanctuary — from $1,600/night</option>
+                    <option>Royal Penthouse — from $4,200/night</option>
+                  </select>
+                </div>
+              </div>
+              <div class="res-field">
+                <label>Guests</label>
+                <div class="select-wrap">
+                  <select>
+                    <option>1 Adult</option>
+                    <option selected>2 Adults</option>
+                    <option>2 Adults + 1 Child</option>
+                    <option>2 Adults + 2 Children</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="res-divider"></div>
+
+            <div class="res-row single">
+              <div class="res-field">
+                <label>Special Requests</label>
+                <textarea placeholder="Occasion, dietary requirements, room preferences…"></textarea>
+              </div>
+            </div>
+
+            <button type="submit" class="res-submit">Request Reservation</button>
+          </form>
+        </div>
+
+        <div class="res-success" id="res-success">
+          <div class="res-success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3>Request Received</h3>
+          <p>Thank you. Our concierge team will<br/>confirm your reservation within 2 hours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Custom cursor — zero-lag via translate3d + RAF
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let cx = -100, cy = -100;
+    document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; }, { passive: true });
+    (function loop() {
+      cursor.style.transform = `translate3d(${cx - 4}px,${cy - 4}px,0)`;
+      ring.style.transform   = `translate3d(${cx - 16}px,${cy - 16}px,0)`;
+      requestAnimationFrame(loop);
+    })();
+
+    // Reservation modal
+    const modal = document.getElementById('res-modal');
+    function openModal() { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    function closeModal() { modal.classList.remove('open'); document.body.style.overflow = ''; }
+    document.getElementById('res-close').addEventListener('click', closeModal);
+    document.getElementById('res-backdrop').addEventListener('click', closeModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    // Wire all reserve/booking triggers
+    document.querySelectorAll('.nav-btn, .form-submit, .btn-outline, .hero-cta').forEach(el => {
+      el.addEventListener('click', e => { e.preventDefault(); openModal(); });
+    });
+    function submitReservation(e) {
+      e.preventDefault();
+      document.getElementById('res-form').style.display = 'none';
+      document.getElementById('res-success').classList.add('show');
+      setTimeout(closeModal, 3200);
+      setTimeout(() => {
+        document.getElementById('res-form').style.display = '';
+        document.getElementById('res-success').classList.remove('show');
+        document.getElementById('res-form').reset();
+      }, 3600);
+    }
+
+    // Room carousel inside modal
+    const carSlides = [
+      { tag: 'Signature Suite', title: 'Sea View<br/><em>Arched Suite</em>',  desc: '72 m² · Sea View · from $1,200/night' },
+      { tag: 'Deluxe Room',     title: 'The Citadel<br/><em>Retreat</em>',     desc: '45 m² · Garden View · from $800/night' },
+      { tag: 'Spa Suite',       title: 'Marble & Oak<br/><em>Sanctuary</em>',  desc: 'Private Terrace · Plunge Bath · from $1,600/night' },
+      { tag: 'Grand Lobby',     title: 'The Blue<br/><em>Citadel</em>',        desc: 'Your arrival — where the journey begins' },
+      { tag: 'The Marina',      title: 'Waterfront<br/><em>Promenade</em>',    desc: 'Private berths · Yacht concierge · Sunset cruises' },
+      { tag: 'Aerial View',     title: 'The Estate<br/><em>from Above</em>',   desc: 'Mediterranean coastline · Palm gardens · Full marina' },
+    ];
+    let carIdx = 0, carTimer = null;
+    const carTrack  = document.getElementById('car-track');
+    const carTag    = document.getElementById('car-tag');
+    const carTitle  = document.getElementById('car-title');
+    const carDesc   = document.getElementById('car-desc');
+    const carDotsEl = document.getElementById('car-dots');
+    const carEl     = document.getElementById('res-carousel');
+
+    // Build dots
+    carSlides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'car-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      carDotsEl.appendChild(d);
+    });
+
+    function slideW() { return carEl.offsetWidth || 260; }
+
+    function sizeSlides() {
+      const w = slideW();
+      const slides = document.querySelectorAll('.car-slide');
+      slides.forEach(s => s.style.width = w + 'px');
+      carTrack.style.width = (w * slides.length) + 'px';
+    }
+
+    function goTo(idx) {
+      carIdx = (idx + carSlides.length) % carSlides.length;
+      sizeSlides();
+      carTrack.style.transform = `translateX(-${carIdx * slideW()}px)`;
+      carTag.innerHTML   = carSlides[carIdx].tag;
+      carTitle.innerHTML = carSlides[carIdx].title;
+      carDesc.innerHTML  = carSlides[carIdx].desc;
+      carDotsEl.querySelectorAll('.car-dot').forEach((d, i) =>
+        d.classList.toggle('active', i === carIdx));
+    }
+
+    function startAuto() {
+      stopAuto();
+      carTimer = setInterval(() => goTo(carIdx + 1), 3500);
+    }
+    function stopAuto() { clearInterval(carTimer); carTimer = null; }
+
+    document.getElementById('car-prev').addEventListener('click', () => { goTo(carIdx - 1); startAuto(); });
+    document.getElementById('car-next').addEventListener('click', () => { goTo(carIdx + 1); startAuto(); });
+    carEl.addEventListener('mouseenter', stopAuto);
+    carEl.addEventListener('mouseleave', startAuto);
+
+    // Re-size on window resize
+    window.addEventListener('resize', () => { sizeSlides(); goTo(carIdx); });
+
+    // Start auto-play when modal opens
+    const _openModal = openModal;
+    openModal = function() {
+      _openModal();
+      // Wait one frame so the panel has layout before measuring width
+      requestAnimationFrame(() => { goTo(0); startAuto(); });
+    };
+
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Hero scale on load
+    window.addEventListener('load', () => {
+      document.getElementById('hero').classList.add('loaded');
+    });
+
+    // Lobby parallax trigger
+    const lobby = document.getElementById('lobby');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in-view');
+      });
+    }, { threshold: 0.2 });
+    obs.observe(lobby);
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    reveals.forEach(el => revealObs.observe(el));
+
+    // Cursor grow on interactive elements
+    document.querySelectorAll('a, button, .room-card, .gallery-item').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '20px';
+        cursor.style.height = '20px';
+        cursor.style.marginLeft = '-5px';
+        cursor.style.marginTop = '-5px';
+        ring.style.width = '56px';
+        ring.style.height = '56px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px';
+        cursor.style.height = '10px';
+        cursor.style.marginLeft = '0';
+        cursor.style.marginTop = '0';
+        ring.style.width = '36px';
+        ring.style.height = '36px';
+      });
+    });
+
+    // Subtle parallax on hero
+    window.addEventListener('scroll', () => {
+      const heroImg = document.querySelector('.hero-img');
+      if (heroImg) {
+        heroImg.style.transform = `scale(1) translateY(${window.scrollY * 0.3}px)`;
+      }
+    });
+  </script>
+</body>
+</html>
